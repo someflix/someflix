@@ -48,6 +48,11 @@ jobs:
       - name: Print Environment Variable
         run: echo $MY_ENV_VAR
 
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1.0.4
+        with:
+          path: dist/
+
 
   # Deployment job
   deploy:
