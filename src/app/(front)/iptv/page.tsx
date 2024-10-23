@@ -193,6 +193,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Image from "next/image"
+import { Input } from '@/components/ui/input';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 interface SportsEvent {
   title: string
@@ -332,7 +336,37 @@ export default function Component() {
     //   </div>
     // </div>
     <div>
-      Coming Soon !!
+            <main className="flex-grow container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8">
+        <motion.div 
+          className="w-full md:w-1/2 space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+            Live TV Shows <br />
+            <span className="text-blue-500">Coming Soon</span>
+          </h2>
+          <p className="text-xl text-gray-300">
+            Get ready for an immersive live TV experience. Stay tuned and be the first to know when we launch!
+          </p>
+        </motion.div>
+
+        <motion.div 
+          className="w-full md:w-1/2"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <Image
+            src="https://media.istockphoto.com/id/1336906460/photo/media-concept-multiple-television-screens.jpg?s=612x612&w=0&k=20&c=UADwGBrVEBLSVirl7wWvliVXjXC_j112Qwerm-cDKyY="
+            alt="Live TV Shows Coming Soon"
+            width={600}
+            height={400}
+            className="rounded-lg shadow-2xl"
+          />
+        </motion.div>
+      </main>
     </div>
   )
 }
