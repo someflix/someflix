@@ -169,8 +169,8 @@ export default function EpisodeSelector({ seasons, onSelect, langSelect, vf, sho
   }
 
   return (
-    <div className="flex flex-col w-full max-w-4xl mx-auto p-4 space-y-4" style={{  width:'100vw', height:'80vh' }}>
-      <ScrollArea className="flex pr-4">
+    <div className="flex flex-col w-full max-w-4xl mx-auto space-y-4" style={{  width:'100%', height:'80vh' }}>
+      <ScrollArea className="flex">
         <Accordion 
           type="single" 
           collapsible 
@@ -184,8 +184,8 @@ export default function EpisodeSelector({ seasons, onSelect, langSelect, vf, sho
         >
           {Object.entries(seasons).map(([season, episodeCount]) => (
             <AccordionItem key={season} value={`season-${season}`} className="border-0">
-              <AccordionTrigger className="text-lg font-semibold hover:no-underline rounded-lg bg-secondary px-4 py-2">
-                <div className="flex items-center justify-between w-full">
+              <AccordionTrigger className="text-lg font-semibold hover:no-underline rounded-lg bg-slate-950 px-4 py-2">
+                <div className="flex items-center justify-between w-full border-solid border-1 border-sky-500">
                   <span>{vf ? `Saison ${season}` : `Season ${season}`}</span>
                   <span className="text-sm font-normal text-muted-foreground">
                     {episodeCount} {vf ? 'épisodes' : 'episodes'}
@@ -203,14 +203,16 @@ export default function EpisodeSelector({ seasons, onSelect, langSelect, vf, sho
                   <div className="space-y-2 mt-2">
                     {Array.from({ length: episodeCount }, (_, i) => i + 1).map((episode) => {
                       const episodeInfo = episodeDetails[`${season}-${episode}`]
+                      if (!episodeInfo?.runtime)
+                        return ;
                       return (
                         <Button
                           key={episode}
                           variant="ghost"
                           className={`w-full justify-start text-left h-auto py-4 px-4 rounded-lg ${
                             selectedSeason === Number(season) && selectedEpisode === episode
-                              ? 'bg-primary text-primary-foreground'
-                              : 'bg-muted hover:bg-muted/80'
+                              ? 'bg-slate-600 text-primary-foreground'
+                              : 'bg-slate-900 hover:bg-muted/80'
                           }`}
                           onClick={() => handleEpisodeClick(Number(season), episode)}
                         >
