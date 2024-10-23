@@ -13,6 +13,8 @@ import {
   Pause,
   VolumeX,
   Volume2,
+  Menu,
+  Sandwich
 } from "lucide-react";
 
 type IconProps = LucideProps;
@@ -22,11 +24,14 @@ export const Icons = {
   chevronRight: ChevronRight,
   info: Info,
   search: Search,
+  kebab: Sandwich,
   logo: PlayIcon,
+  menu: Menu,
   play: PlayIcon,
   pause: Pause,
   volume: Volume2,
   volumeMute: VolumeX,
+
   // logo: (props: IconProps) => (
   //   <svg
   //     xmlns="http://www.w3.org/2000/svg"

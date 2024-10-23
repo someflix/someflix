@@ -84,7 +84,7 @@ function EmbedPlayer(props: EmbedPlayerProps) {
       className='top-10 z-40'
       style={{
         width: '100%',
-        height: '100vh',
+        height: '100%',
         backgroundColor: '#000',
         
       }}>
@@ -98,7 +98,7 @@ function EmbedPlayer(props: EmbedPlayerProps) {
         referrerPolicy="origin"
         sandbox={
           !props.url.includes('frembed.pro')
-            ? 'allow-scripts allow-same-origin allow-top-navigation-by-user-activation'
+            ? 'allow-scripts allow-same-origin allow-top-navigation-by-user-activation allow-presentation'
             : undefined
         }
       />

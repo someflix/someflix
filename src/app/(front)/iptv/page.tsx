@@ -287,49 +287,52 @@ export default function Component() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-100">TV & Sport Channels</h1>
-        <Tabs defaultValue="sports" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-800 rounded-none">
-            <TabsTrigger 
-              value="sports"
-              className="data-[state=active]:bg-gray-700 data-[state=active]:text-white rounded-none"
-            >
-              Sports
-            </TabsTrigger>
-            <TabsTrigger 
-              value="news"
-              className="data-[state=active]:bg-gray-700 data-[state=active]:text-white rounded-none"
-            >
-              News
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="sports">
-            <ScrollArea className="h-[70vh] pr-4">
-              <ChannelGrid events={sportsEvents} />
-            </ScrollArea>
-          </TabsContent>
-          <TabsContent value="news">
-            <ScrollArea className="h-[70vh] pr-4">
-              <ChannelGrid events={newsChannels} />
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
+    // <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100">
+    //   <div className="container mx-auto px-4 py-8">
+    //     <h1 className="text-3xl font-bold text-center mb-8 text-gray-100">TV & Sport Channels</h1>
+    //     <Tabs defaultValue="sports" className="w-full">
+    //       <TabsList className="grid w-full grid-cols-2 bg-gray-800 rounded-none">
+    //         <TabsTrigger 
+    //           value="sports"
+    //           className="data-[state=active]:bg-gray-700 data-[state=active]:text-white rounded-none"
+    //         >
+    //           Sports
+    //         </TabsTrigger>
+    //         <TabsTrigger 
+    //           value="news"
+    //           className="data-[state=active]:bg-gray-700 data-[state=active]:text-white rounded-none"
+    //         >
+    //           News
+    //         </TabsTrigger>
+    //       </TabsList>
+    //       <TabsContent value="sports">
+    //         <ScrollArea className="h-[70vh] pr-4">
+    //           <ChannelGrid events={sportsEvents} />
+    //         </ScrollArea>
+    //       </TabsContent>
+    //       <TabsContent value="news">
+    //         <ScrollArea className="h-[70vh] pr-4">
+    //           <ChannelGrid events={newsChannels} />
+    //         </ScrollArea>
+    //       </TabsContent>
+    //     </Tabs>
 
-        {selectedEvent && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
-            <div className="w-full h-full max-w-4xl max-h-[80vh] bg-gray-800 overflow-hidden">
-              <iframe
-                src={selectedEvent}
-                className="w-full h-full"
-                allowFullScreen
-                sandbox="allow-scripts allow-same-origin allow-top-navigation-by-user-activation"
-              ></iframe>
-            </div>
-          </div>
-        )}
-      </div>
+    //     {selectedEvent && (
+    //       <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm">
+    //         <div className="w-full h-full max-w-4xl max-h-[80vh] bg-gray-800 overflow-hidden">
+    //           <iframe
+    //             src={selectedEvent}
+    //             className="w-full h-full"
+    //             allowFullScreen
+    //             sandbox="allow-scripts allow-same-origin allow-top-navigation-by-user-activation"
+    //           ></iframe>
+    //         </div>
+    //       </div>
+    //     )}
+    //   </div>
+    // </div>
+    <div>
+      Coming Soon !!
     </div>
   )
 }

@@ -27,6 +27,15 @@ interface Data {
   };
 }
 
+export interface EpisodeInfo {
+  name: string
+  overview: string
+  runtime: number
+  still_path: string
+  vote_average: number
+}
+
+
 function countSeasonsAndEpisodes(data: Data): { [key: string]: number } {
   const seasons: { [key: string]: number } = {};
 
@@ -88,8 +97,8 @@ async function fetchEnglishEpisodes(id: string | number | undefined){
 export default async function Page({ params }: { params: { slug: string } }) {
   const id = params.slug.split('-').pop();
   const vfAvailable = await checkFrenchVersionAvailability(id);
-  const engEpisodes = await fetchEnglishEpisodes(id);
-  const voUrl = `https://vidsrc.cc/v2/embed/tv/${id}`;
+  const engEpisodes = await fetchEnglishEpisodes(id) || {};
+  const voUrl = `https://vidsrc.dev/embed/tv/${id}`;
   const vfUrl = `https://frembed.pro/api/serie.php?id=${id}`;
 
   // console.log('English Array : ' + engEpisodes);
@@ -103,14 +112,3 @@ export default async function Page({ params }: { params: { slug: string } }) {
     </div>
   );
 }
-
-
-// import React from 'react';
-// import EmbedPlayer from '@/components/watch/embed-player';
-
-// export const revalidate = 3600;
-
-// export default function Page({ params }: { params: { slug: string } }) {
-//   const id = params.slug.split('-').pop();
-//   return <EmbedPlayer url={`https://vidsrc.cc/v2/embed/tv/${id}`} />;
-// }

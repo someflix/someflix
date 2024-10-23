@@ -129,7 +129,7 @@ export function MainNav({ items }: MainNavProps) {
           className="hidden md:block"
           onClick={() => handleChangeStatusOpen(false)}>
           <div className="flex items-center space-x-2">
-            <Icons.logo className="h-6 w-6" aria-hidden="true" />
+            <Icons.kebab className="h-6 w-6" aria-hidden="true" />
             <span className="inline-block font-bold">{siteConfig.name}</span>
             <span className="sr-only">Home</span>
           </div>
@@ -162,8 +162,8 @@ export function MainNav({ items }: MainNavProps) {
                 className="flex items-center space-x-2 px-0 hover:bg-transparent focus:ring-0"
               // className="h-auto px-2 py-1.5 text-base hover:bg-neutral-800 focus:ring-0 dark:hover:bg-neutral-800 lg:hidden"
               >
-                <Icons.logo className="h-6 w-6" />
-                <span className="text-base font-bold">Menu</span>
+                <Icons.menu className="h-6 w-6" />
+                {/* <span className="text-base font-bold">Menu</span> */}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -211,6 +211,15 @@ export function MainNav({ items }: MainNavProps) {
           </DropdownMenu>
         </div>
       </div>
+        <Button variant="link"  asChild>
+          <a href="/" aria-label="Home">
+          <div className="flex items-center space-x-2">
+            <Icons.kebab className="h-6 w-6" aria-hidden="true" />
+            <span className="inline-block font-bold">{siteConfig.name}</span>
+            <span className="sr-only">Home</span>
+          </div>
+          </a>
+        </Button>
       <div className="flex items-center gap-1">
         <DebouncedInput
           id="search-input"
