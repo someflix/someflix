@@ -211,6 +211,7 @@ export function MainNav({ items }: MainNavProps) {
           </DropdownMenu>
         </div>
       </div>
+      <div className="block md:hidden">
         <Button variant="link"  asChild>
           <a href="/" aria-label="Home">
           <div className="flex items-center space-x-2">
@@ -220,6 +221,7 @@ export function MainNav({ items }: MainNavProps) {
           </div>
           </a>
         </Button>
+      </div>
       <div className="flex items-center gap-1">
         <DebouncedInput
           id="search-input"
