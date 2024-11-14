@@ -18,10 +18,11 @@ import {
   type VideoResult,
 } from '@/types';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 import Youtube from 'react-youtube';
 import CustomImage from './custom-image';
+import { siteConfig } from '@/configs/site';
 
 type YouTubePlayer = {
   mute: () => void;
@@ -58,6 +59,8 @@ const defaultOptions: Record<string, object> = {
 
 const ShowModal = () => {
   // stores
+  const router = useRouter();
+  const pathname = usePathname();
   const modalStore = useModalStore();
   const IS_MOBILE: boolean = isMobile();
 
@@ -91,30 +94,31 @@ const ShowModal = () => {
     if (!id || !type) {
       return;
     }
-    const data: ShowWithGenreAndVideo = await MovieService.findMovieByIdAndType(
+    const data: ShowWithGenreAndVideo | null = await MovieService.findMovieByIdAndType(
       id,
       type,
     );
-    if (data?.genres) {
-      setGenres(data.genres);
-    }
-    if (data.videos?.results?.length) {
-      const videoData: VideoResult[] = data.videos?.results;
-      const result: VideoResult | undefined = videoData.find(
-        (item: VideoResult) => item.type === 'Trailer',
-      );
-      if (result?.key) setTrailer(result.key);
+    if (data) {
+      if (data.genres) {
+        setGenres(data.genres);
+      }
+      if (data.videos?.results?.length) {
+        const videoData: VideoResult[] = data.videos.results;
+        const result: VideoResult | undefined = videoData.find(
+          (item: VideoResult) => item.type === 'Trailer',
+        );
+        if (result?.key) setTrailer(result.key);
+      }
     }
   };
 
   const handleCloseModal = () => {
-    modalStore.reset();
-    if (!modalStore.show || modalStore.firstLoad) {
-      window.history.pushState(null, '', '/home');
-    } else {
-      window.history.back();
+    modalStore.reset()
+    const isMainNavRoute = siteConfig.mainNav.some(navItem => navItem.href === pathname)
+    if (!isMainNavRoute) {
+      router.back()
     }
-  };
+  }
 
   const onEnd = (event: YouTubeEvent) => {
     event.target.seekTo(0);

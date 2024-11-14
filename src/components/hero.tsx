@@ -109,13 +109,14 @@ const Hero = ({ randomShow }: HeroProps) => {
                   <Button
                     aria-label="Open show's details modal"
                     variant="outline"
-                    className="h-auto flex-shrink-0 gap-2 rounded-xl"
+                    className="h-auto flex-shrink-0 gap-2 rounded-xl backdrop-blur-md bg-black/30 hover:bg-white/40 border-white/50 text-white shadow-lg transition-all duration-300 ease-in-out"
                     onClick={() => {
-                      modalStore.setShow(randomShow);
-                      modalStore.setOpen(true);
-                      modalStore.setPlay(true);
-                    }}>
-                    <Icons.info aria-hidden="true" />
+                      modalStore.setShow(randomShow)
+                      modalStore.setOpen(true)
+                      modalStore.setPlay(true)
+                    }}
+                  >
+                    <Icons.info aria-hidden="true" className="w-5 h-5" />
                     More Info
                   </Button>
                 </div>

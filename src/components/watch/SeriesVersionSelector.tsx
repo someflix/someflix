@@ -188,7 +188,7 @@ export default function SeriesVersionSelector({
                       variant="outline"
                       onClick={handlePreviousEpisode}
                       disabled={selectedSeason === 1 && selectedEpisode === 1}
-                      className='bg-gradient-to-tr from-black to-purple-900 bg-opacity-80 rounded shadow hover:from-purple-500 hover:to-black transition'
+                      className=' bg-opacity-80 rounded shadow hover:from-purple-500 hover:to-black transition'
                     >
                       <ChevronLeft className="mr-2 h-4 w-4" /> Previous
                     </Button>
@@ -199,7 +199,7 @@ export default function SeriesVersionSelector({
                         selectedSeason === Object.keys(url.includes(vfUrl) ? episodes : engEpisodes).length &&
                         selectedEpisode === (url.includes(vfUrl) ? episodes : engEpisodes)[selectedSeason]
                       }
-                      className='bg-gradient-to-br from-purple-900 to-black bg-opacity-80 rounded shadow hover:from-purple-500 hover:to-black transition'
+                      className=' bg-opacity-80 rounded shadow hover:from-purple-500 hover:to-black transition'
                     >
                       Next <ChevronRight className="ml-2 w-full max-w-4xl" />
                     </Button>

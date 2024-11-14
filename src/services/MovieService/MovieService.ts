@@ -16,6 +16,7 @@ import {
 } from '@/enums/request-type';
 import { Genre } from '@/enums/genre';
 import { cache } from 'react';
+import axios from 'axios';
 
 const requestTypesNeedUpdateMediaType = [
   RequestType.TOP_RATED,
@@ -27,7 +28,14 @@ const requestTypesNeedUpdateMediaType = [
 const baseUrl = 'https://api.themoviedb.org/3';
 
 class MovieService extends BaseService {
-  static async findCurrentMovie(id: number, pathname: string): Promise<Show> {
+  static getImagePath(path: string | null, size: 'original' | 'w500' = 'w500'): string {
+    if (!path) {
+      return '/placeholder.svg';
+    }
+    return `https://image.tmdb.org/t/p/${size}${path}`;
+  }
+
+  static async findCurrentMovie(id: number, pathname: string): Promise<Show | null> {
     const data = await Promise.allSettled([
       this.findMovie(id),
       this.findTvSeries(id),
@@ -41,9 +49,9 @@ class MovieService extends BaseService {
         return pathname.includes(getSlug(item.id, getNameFromShow(item)));
       });
     if (!response?.length) {
-      return Promise.reject('not found');
+      return null;
     }
-    return Promise.resolve<Show>(response[0]);
+    return response[0];
   }
 
   static findMovie = cache(async (id: number) => {
@@ -61,15 +69,31 @@ class MovieService extends BaseService {
     return this.axios(baseUrl).get<KeyWordResponse>(`/${type}/${id}/keywords`);
   }
 
-  static findMovieByIdAndType = cache(async (id: number, type: string) => {
+  static findMovieByIdAndType = cache(async (id: number, type: string): Promise<ShowWithGenreAndVideo | null> => {
     const params: Record<string, string> = {
       language: 'en-US',
       append_to_response: 'videos',
     };
-    const response: AxiosResponse<ShowWithGenreAndVideo> = await this.axios(
-      baseUrl,
-    ).get<ShowWithGenreAndVideo>(`/${type}/${id}`, { params });
-    return Promise.resolve(response.data);
+    try {
+      const response: AxiosResponse<ShowWithGenreAndVideo> = await this.axios(
+        baseUrl
+      ).get<ShowWithGenreAndVideo>(`/${type}/${id}`, { params });
+      
+      console.log(response)
+      if (response.data) {
+        response.data.poster_path = this.getImagePath(response.data.poster_path);
+        response.data.backdrop_path = this.getImagePath(response.data.backdrop_path, 'original');
+      }
+      
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        console.warn(`Resource not found for type: ${type}, id: ${id}`);
+        return null;
+      }
+      console.error(`Error fetching movie/show data:`, error);
+      throw error;
+    }
   });
 
   static urlBuilder(req: TmdbRequest) {
@@ -119,7 +143,7 @@ class MovieService extends BaseService {
     return this.axios(baseUrl).get<TmdbPagingResponse>(this.urlBuilder(req));
   }
 
-  static getShows = cache(async (requests: ShowRequest[]) => {
+  static getShows = cache(async (requests: ShowRequest[]): Promise<CategorizedShows[]> => {
     const shows: CategorizedShows[] = [];
     const promises = requests.map((m) => this.executeRequest(m.req));
     const responses = await Promise.allSettled(promises);
@@ -137,9 +161,11 @@ class MovieService extends BaseService {
           requestTypesNeedUpdateMediaType.indexOf(requests[i].req.requestType) >
           -1
         ) {
-          res.value.data.results.forEach(
-            (f) => (f.media_type = requests[i].req.mediaType),
-          );
+          res.value.data.results.forEach(f => {
+            f.media_type = requests[i].req.mediaType;
+            f.poster_path = this.getImagePath(f.poster_path);
+            f.backdrop_path = this.getImagePath(f.backdrop_path, 'original');
+          });
         }
         shows.push({
           title: requests[i].title,
@@ -153,18 +179,22 @@ class MovieService extends BaseService {
     return shows;
   });
 
-  static searchMovies = cache(async (query: string, page?: number) => {
+  static searchMovies = cache(async (query: string, page?: number): Promise<TmdbPagingResponse> => {
     const { data } = await this.axios(baseUrl).get<TmdbPagingResponse>(
       `/search/multi?query=${encodeURIComponent(query)}&language=en-US&page=${
         page ?? 1
       }`,
     );
-    console.log(data.results[0]?.media_type);
-    data.results.sort((a, b) => {
-      return b.popularity - a.popularity;
-    });
+  
+    // Filter out items where either backdrop_path or poster_path is null or undefined
+    data.results = data.results
+      .filter(item => item.backdrop_path !== null && item.backdrop_path !== undefined &&
+                      item.poster_path !== null && item.poster_path !== undefined)
+      .sort((a, b) => b.popularity - a.popularity);
+  
     return data;
   });
+  
 }
 
 export default MovieService;

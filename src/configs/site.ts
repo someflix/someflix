@@ -81,7 +81,7 @@ export const siteConfig = {
       // icon: Icons.play,
     },
     {
-      title: 'TV Shows',
+      title: 'Series',
       href: '/tv-shows',
       // icon: Icons.tvShow,
     },
