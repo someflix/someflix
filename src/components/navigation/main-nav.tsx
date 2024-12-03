@@ -26,6 +26,7 @@ interface SearchResult {
 export default function MainNav({ items }: MainNavProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isStandalone, setIsStandalone] = useState(false)
   const path = usePathname()
   const router = useRouter()
   const searchStore = useSearchStore()
@@ -43,6 +44,10 @@ export default function MainNav({ items }: MainNavProps) {
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('resize', handleResize)
+
+    if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone) {
+      setIsStandalone(true)
+    }
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
@@ -80,7 +85,7 @@ export default function MainNav({ items }: MainNavProps) {
   const searchShowsByQuery = useCallback(async (value: string) => {
     if (!value?.trim()?.length) {
       if (path === '/search') {
-        router.push('/home')
+        router.push('/')
       } else {
         window.history.pushState(null, '', path)
       }
@@ -113,28 +118,43 @@ export default function MainNav({ items }: MainNavProps) {
     setIsSidebarOpen((prev) => !prev)
   }, [])
 
+  const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string | undefined) => {
+    e.preventDefault()
+    if (href) {
+      router.push(href)
+    }
+    if (isSidebarOpen) {
+      setIsSidebarOpen(false)
+    }
+    handleChangeStatusOpen(false)
+  }, [router, isSidebarOpen, handleChangeStatusOpen])
+
   return (
     <>
       <nav
         className={cn(
-          'relative flex h-16 w-full items-center justify-between px-4 transition-colors duration-300 md:sticky',
+          'relative flex w-full h-16 items-center justify-between px-4 transition-colors duration-300 md:sticky',
           isScrolled
-            ? 'bg-background/70 backdrop-blur-md shadow-md'
-            : 'bg-transparent'
+            ? 'backdrop-blur-md shadow-md'
+            : 'bg-transparent',
+          isScrolled && isStandalone
+            ? 'pt-8 h-24' : ''
         )}
       >
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden z-50"
-          onClick={toggleSidebar}
-          aria-label="Toggle menu"
-        >
-          <Icons.menu className="h-6 w-6" />
-        </Button>
+        {!isStandalone && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden z-50"
+            onClick={toggleSidebar}
+            aria-label="Toggle menu"
+          >
+            <Icons.menu className="h-6 w-6" />
+          </Button>
+        )}
 
         <div className="flex items-center justify-center md:justify-start md:gap-4 absolute left-0 right-0 mx-auto md:relative md:mx-0">
-          <Link href="/" prefetch className="flex items-center space-x-2">
+          <Link href="/" onClick={(e) => handleLinkClick(e, '/')} className="flex items-center space-x-2">
             <Icons.kebab className="h-6 w-6" aria-hidden="true" />
             <span className="font-bold">{siteConfig.name}</span>
           </Link>
@@ -146,14 +166,13 @@ export default function MainNav({ items }: MainNavProps) {
               item.href && (
                 <Link
                   key={index}
-                  href={item.href}
-                  prefetch
+                  href={item.href || '#'}
+                  onClick={(e) => item.href && handleLinkClick(e, item.href)}
                   className={cn(
                     'text-sm font-medium text-foreground/60 transition hover:text-foreground/80',
                     path === item.href && 'font-bold text-foreground',
                     item.disabled && 'cursor-not-allowed opacity-80'
                   )}
-                  onClick={() => handleChangeStatusOpen(false)}
                 >
                   {item.title}
                 </Link>
@@ -176,7 +195,7 @@ export default function MainNav({ items }: MainNavProps) {
       </nav>
 
       <AnimatePresence>
-        {isSidebarOpen && (
+        {isSidebarOpen && !isStandalone && (
           <>
             <motion.div
               key="backdrop"
@@ -196,7 +215,7 @@ export default function MainNav({ items }: MainNavProps) {
               className="fixed inset-y-0 left-0 z-50 w-64 bg-background/20 backdrop-blur-md shadow-lg flex flex-col"
             >
               <div className="flex h-16 items-center justify-between px-4">
-                <Link href="/" prefetch className="flex items-center space-x-2" onClick={toggleSidebar}>
+                <Link href="/" onClick={(e) => handleLinkClick(e, '/')} className="flex items-center space-x-2">
                   <Icons.kebab className="h-6 w-6" aria-hidden="true" />
                   <span className="font-bold">{siteConfig.name}</span>
                 </Link>
@@ -242,16 +261,12 @@ export default function MainNav({ items }: MainNavProps) {
                     <Link
                       key={index}
                       href={item.href || '#'}
-                      prefetch
+                      onClick={(e) => item.href && handleLinkClick(e, item.href)}
                       className={cn(
                         'flex items-center gap-4 py-3 text-base font-medium text-foreground/60 transition hover:text-foreground/80',
                         path === item.href && 'font-bold text-foreground',
                         item.disabled && 'cursor-not-allowed opacity-80'
                       )}
-                      onClick={() => {
-                        handleChangeStatusOpen(false)
-                        toggleSidebar()
-                      }}
                     >
                       <Icon className="h-5 w-5 flex-shrink-0" />
                       <span>{item.title}</span>

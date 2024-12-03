@@ -1,114 +1,46 @@
 import React from 'react';
-import SeriesVersionSelector from '@/components/watch/SeriesVersionSelector';
+import EmbedPlayer from '@/components/watch/embed-player';
+import { addToRecentlyWatched } from '@/utils/recentlyWatched';
+import MovieService from '@/services/MovieService';
+import { MediaType } from '@/types';
+import { notFound } from 'next/navigation';
 
 export const revalidate = 3600;
 
-interface Season {
-  season_number: number;
-  episode_count: number;
-}
+export default async function TVShowPage({ params, searchParams }: { params: { slug: string }, searchParams: { version?: string } }) {
+  const idMatch = params.slug.match(/(\d+)/);
+  const id = idMatch ? idMatch[0] : null;
+  const version = searchParams.version;
 
-interface Item {
-  title: string;
-  tmdb: string;
-  imdb: string;
-  year: number | null;
-  sa: string;
-  epi: string;
-  version: string;
-  link: string;
-}
+  console.log('TV Show watch page params:', { slug: params.slug, id, version });
 
-interface Data {
-  status: number;
-  result: {
-    totalItems: string;
-    items: Item[];
-  };
-}
+  if (!id) {
+    console.error('Invalid TV show ID:', id);
+    notFound();
+  }
 
-export interface EpisodeInfo {
-  name: string
-  overview: string
-  runtime: number
-  still_path: string
-  vote_average: number
-}
-
-
-function countSeasonsAndEpisodes(data: Data): { [key: string]: number } {
-  const seasons: { [key: string]: number } = {};
-
-  data.result.items.forEach(item => {
-    const season = item.sa;
-    if (!seasons[season]) {
-      seasons[season] = 0;
-    }
-    seasons[season]++;
-  });
-
-  return seasons;
-}
-
-
-async function checkFrenchVersionAvailability(id: string | undefined) {
   try {
-    const response = await fetch(`https://api.frembed.pro/tv/check?id=${id}`);
-    const data = await response.json();
+    const tvShow = await MovieService.findMovieByIdAndType(parseInt(id), 'tv');
 
-    if (data.status === 200 && data.result.totalItems >= 1) {
-      const seasonEpisodeCount = countSeasonsAndEpisodes(data);
-      return seasonEpisodeCount;
-    } else {
-      return {};
+    if (!tvShow) {
+      console.error('TV show not found for ID:', id);
+      notFound();
     }
+
+    // Construct the embed URL based on version
+    const embedUrl = version === 'french'
+      ? `https://play.frembed.lol/api/serie.php?id=${id}&sa=1&epi=1`
+      : `https://vidsrc.cc/v2/embed/tv/${id}`;
+
+    console.log('Constructed embed URL:', embedUrl);
+
+    return (
+      <div className="fixed inset-0 z-50 bg-black">
+        <EmbedPlayer url={embedUrl} />
+      </div>
+    );
   } catch (error) {
-    console.error('Error fetching movie data:', error);
-    return {};
+    console.error('Error in TV show watch page:', error);
+    notFound();
   }
-}
-
-async function fetchEnglishEpisodes(id: string | number | undefined){
-  const apiKey = process.env.NEXT_PRIVATE_TMDB_API_KEY;
-  try {
-    const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}`);
-    
-    if (response.ok) {
-      const data = await response.json();
-      const seasons = data.seasons || [];
-      const seasonsEpisodes: { [key: string]: number } = {};
-
-      seasons.forEach((season: any) => {
-        if (season.season_number !== 0)
-          seasonsEpisodes[season.season_number] = season.episode_count;
-      });
-      return seasonsEpisodes;
-    } else {
-      return {};
-    }
-
-    
-  }
-  catch(e){
-    console.log('Error by fetching TMDB');
-  }
-}
-
-export default async function Page({ params }: { params: { slug: string } }) {
-  const id = params.slug.split('-').pop();
-  const vfAvailable = await checkFrenchVersionAvailability(id);
-  const engEpisodes = await fetchEnglishEpisodes(id) || {};
-  const voUrl = `https://vidsrc.dev/embed/tv/${id}`;
-  const vfUrl = `https://frembed.pro/api/serie.php?id=${id}`;
-
-  // console.log('English Array : ' + engEpisodes);
-
-  if (typeof vfAvailable !== 'boolean' && Object.keys(vfAvailable).length > 0)
-    console.log(vfAvailable);
-
-  return (
-    <div>
-      <SeriesVersionSelector vfUrl={vfUrl} voUrl={voUrl} episodes={vfAvailable} engEpisodes={engEpisodes} />
-    </div>
-  );
 }

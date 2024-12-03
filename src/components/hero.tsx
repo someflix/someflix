@@ -72,52 +72,31 @@ const Hero = ({ randomShow }: HeroProps) => {
               priority
             />
             <div className="absolute bottom-0 left-0 right-0 top-0">
-              <div className="absolute bottom-[35%] left-[4%] top-0 z-10 flex w-[36%] flex-col justify-end space-y-2">
-                <h1 className="text-[3vw] font-bold">
+              <div className="absolute bottom-[35%] left-[4%] top-0 z-10 flex w-[50%] flex-col justify-end space-y-4">
+                <h1 className="text-[5vw] font-bold leading-tight text-shadow-lg">
                   {randomShow?.title ?? randomShow?.name}
                 </h1>
                 <div className="flex space-x-2 text-[2vw] font-semibold md:text-[1.2vw]">
                   <p className="text-green-600">
                     {Math.round(randomShow?.vote_average * 10) ?? '-'}% Match
                   </p>
-                  {/* <p className="text-gray-300">{randomShow?.release_date ?? "-"}</p> */}
                   <p>{randomShow?.release_date ?? '-'}</p>
                 </div>
-                {/* <p className="line-clamp-4 text-sm text-gray-300 md:text-base"> */}
-                <p className="hidden text-[1.2vw] sm:line-clamp-3">
+                <p className="hidden text-[1.4vw] sm:line-clamp-3 text-shadow-md">
                   {randomShow?.overview ?? '-'}
                 </p>
                 <div className="mt-[1.5vw] flex items-center space-x-2">
-                  <Link
-                    prefetch={false}
-                    href={`/watch/${
-                      randomShow.media_type === MediaType.MOVIE ? 'movie' : 'tv'
-                    }/${randomShow.id}`}>
-                    <Button
-                      aria-label="Play video"
-                      className="h-auto flex-shrink-0 gap-2 rounded-xl"
-                      // onClick={() => {
-                      //   modalStore.setShow(randomShow);
-                      //   modalStore.setOpen(true);
-                      //   modalStore.setPlay(true);
-                      // }}
-                    >
-                      <Icons.play className="fill-current" aria-hidden="true" />
-                      Play
-                    </Button>
-                  </Link>
                   <Button
-                    aria-label="Open show's details modal"
-                    variant="outline"
-                    className="h-auto flex-shrink-0 gap-2 rounded-xl backdrop-blur-md bg-black/30 hover:bg-white/40 border-white/50 text-white shadow-lg transition-all duration-300 ease-in-out"
+                    aria-label="Play video and open show's details modal"
+                    className="h-auto flex-shrink-0 gap-2 rounded-xl text-lg px-5 py-2.5" // Reduced size by approximately 15%
                     onClick={() => {
-                      modalStore.setShow(randomShow)
-                      modalStore.setOpen(true)
-                      modalStore.setPlay(true)
+                      modalStore.setShow(randomShow);
+                      modalStore.setOpen(true);
+                      modalStore.setPlay(true);
                     }}
                   >
-                    <Icons.info aria-hidden="true" className="w-5 h-5" />
-                    More Info
+                    <Icons.play className="fill-current w-5 h-5" aria-hidden="true" />
+                    Play
                   </Button>
                 </div>
               </div>

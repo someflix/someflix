@@ -3,6 +3,7 @@ import ShowsContainer from '@/components/shows-container';
 import { MediaType, type Show } from '@/types';
 import { siteConfig } from '@/configs/site';
 import { RequestType, type ShowRequest } from '@/enums/request-type';
+import { RecentlyViewedMovies } from '@/components/recently-viewed-movies'
 import MovieService from '@/services/MovieService';
 import { Genre } from '@/enums/genre';
 import { getRandomShow } from '@/lib/utils';
@@ -83,6 +84,7 @@ export default async function Home() {
     <>
       <h1 className="hidden">{h1}</h1>
       <Hero randomShow={randomShow} />
+      <RecentlyViewedMovies />
       <ShowsContainer shows={allShows} />
     </>
   );

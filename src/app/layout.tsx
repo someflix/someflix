@@ -12,6 +12,7 @@ import { env } from '@/env.mjs';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
+import MobileNavBar from '@/components/mobile-nav-bar';
 
 export const runtime = 'edge';
 
@@ -68,6 +69,14 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+  manifest: '/manifest.json',
+  themeColor: '#000000',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'KebabFlix',
+  },
   other: { referrer: 'no-referrer-when-downgrade' },
 };
 
@@ -85,7 +94,6 @@ export default function RootLayout({
           fontSans.variable,
           fontHeading.variable,
         )}>
-          
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
