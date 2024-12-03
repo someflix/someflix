@@ -6,10 +6,12 @@ import { getRecentlyWatched } from '@/utils/recentlyWatched'
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { cn, getNameFromShow, getSlug } from '@/lib/utils'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import CustomImage from './custom-image'
 import { useModalStore } from '@/stores/modal'
 import { MediaType } from '@/types'
+import { useSearchStore } from '@/stores/search';
+import Link from 'next/link'
 
 export function RecentlyViewedMovies() {
   const [recentlyViewed, setRecentlyViewed] = useState<ShowWithGenreAndVideo[]>([])
@@ -97,15 +99,27 @@ const ShowCard = ({ show, pathname }: { show: ShowWithGenreAndVideo; pathname: s
     event.currentTarget.src = '/images/grey-thumbnail.jpg';
   };
 
+  const modalStore = useModalStore();
+  const router = useRouter();
+
+  const handleClick = () => {
+    const mediaType = show.media_type === MediaType.TV ? 'tv' : 'movie';
+    const watchPath = `/watch/${mediaType}/${show.id}`;
+
+    // Update the URL without navigating
+    window.history.pushState(null, '', watchPath);
+
+    // Set the show in the modal store
+    modalStore.setShow(show);
+    modalStore.setOpen(true);
+    modalStore.setPlay(false); // Set to false to ensure the modal opens
+
+    // Use router.push for consistent navigation in both standalone and PC modes
+    router.push(watchPath);
+  };
+
   return (
     <picture className="relative aspect-[2/3]">
-      <a
-        className="pointer-events-none"
-        aria-hidden={false}
-        role="link"
-        aria-label={getNameFromShow(show)}
-        href={`/${show.media_type}/${getSlug(show.id, getNameFromShow(show))}`}
-      />
       <CustomImage
         src={
           show.poster_path ?? show.backdrop_path
@@ -121,21 +135,7 @@ const ShowCard = ({ show, pathname }: { show: ShowWithGenreAndVideo; pathname: s
         style={{
           objectFit: 'cover',
         }}
-        onClick={() => {
-          const name = getNameFromShow(show);
-          const path: string =
-            show.media_type === MediaType.TV ? 'tv-shows' : 'movies';
-          window.history.pushState(
-            null,
-            '',
-            `${path}/${getSlug(show.id, name)}`,
-          );
-          useModalStore.setState({
-            show: show,
-            open: true,
-            play: true,
-          });
-        }}
+        onClick={handleClick}
         onError={imageOnErrorHandler}
       />
     </picture>

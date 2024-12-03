@@ -165,21 +165,21 @@ const ShowModal: React.FC = () => {
                   aria-label="Play Original"
                   className="group h-auto rounded py-1 px-2 text-xs sm:py-1.5 sm:px-3 sm:text-sm"
                 >
-                  <Play className="mr-1.5 h-5 w-5 sm:h-5 sm:w-6 fill-current" aria-hidden="true" />
-                  Play Original
+                  <Play className="mr-1.5 h-5 w-5 sm:h-5 sm:w-5 fill-current" aria-hidden="true" />
+                  Original
                 </Button>
               </Link>
               <Link
                 href={`/watch/${
                   modalStore.show?.media_type === MediaType.MOVIE ? 'movie' : 'tv'
-                }/${modalStore.show?.id}?lang=fr`}
+                }/${modalStore.show?.id}?version=french`}
               >
                 <Button
                   aria-label="Play French"
                   className="group h-auto rounded py-1 px-2 text-xs sm:py-1.5 sm:px-3 sm:text-sm"
                 >
-                  <Play className="mr-1.5 h-4 w-4 sm:h-5 sm:w-5 fill-current" aria-hidden="true" />
-                  Play French
+                  <Play className="mr-1.5 h-5 w-5 sm:h-5 sm:w-5 fill-current" aria-hidden="true" />
+                  French
                 </Button>
               </Link>
             </div>

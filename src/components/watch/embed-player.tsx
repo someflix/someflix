@@ -37,9 +37,9 @@ function EmbedPlayer({ url }: EmbedPlayerProps) {
         style={{ opacity: 0 }}
         referrerPolicy="no-referrer-when-downgrade"
         sandbox={
-          !url.includes('frembed.pro')
-            ? 'allow-scripts allow-same-origin allow-top-navigation-by-user-activation allow-presentation'
-            : undefined
+          url.includes('frembed.lol') || url.includes('frembed.pro')
+          ? undefined
+          : 'allow-scripts allow-same-origin allow-top-navigation-by-user-activation allow-presentation'
         }
       />
       

@@ -27,9 +27,12 @@ export default async function TVShowPage({ params, searchParams }: { params: { s
       notFound();
     }
 
+    // Add to recently watched
+
+
     // Construct the embed URL based on version
     const embedUrl = version === 'french'
-      ? `https://play.frembed.lol/api/serie.php?id=${id}&sa=1&epi=1`
+      ? `https://play.frembed.lol/api/serie.php?id=${id}`
       : `https://vidsrc.cc/v2/embed/tv/${id}`;
 
     console.log('Constructed embed URL:', embedUrl);

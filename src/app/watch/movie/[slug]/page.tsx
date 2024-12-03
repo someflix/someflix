@@ -29,7 +29,7 @@ export default async function MoviePage({ params, searchParams }: { params: { sl
     // Construct the embed URL based on version
     const embedUrl = version === 'french'
       ? `https://play.frembed.lol/api/film.php?id=${id}`
-      : `https://vidsrc.dev/embed/movie/${id}`;
+      : `https://vidsrc.cc/v2/embed/movie/${id}`;
 
     console.log('Constructed embed URL:', embedUrl);
 
