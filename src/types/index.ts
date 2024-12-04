@@ -103,3 +103,29 @@ export interface IStack<T> {
   peek(): T | undefined;
   size(): number;
 }
+
+
+export interface Event {
+  id: string
+  title: string
+  category: string
+  date: number
+  popular: boolean
+  teams?: {
+    home: Team
+    away: Team
+  }
+  sources: Source[]
+  poster?: string
+}
+
+interface Team {
+  name: string
+  badge?: string
+}
+
+export interface Source {
+  source: string
+  id: string
+}
+
