@@ -197,7 +197,7 @@ export default function EpisodeSelector({ seasons, onSelect, langSelect, vf, sho
                   <div className="space-y-2 mt-2">
                     {Array.from({ length: 3 }, (_, i) => (
                       <Skeleton key={i} className="w-full h-24" />
-                    ))}
+                    ))} 
                   </div>
                 ) : (
                   <div className="space-y-2 mt-2">
