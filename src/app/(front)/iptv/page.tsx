@@ -339,6 +339,7 @@ export default function Component() {
                         src={`https://embedme.top/embed/${selectedSource.source}/${selectedSource.id}/1`}
                         className="w-full h-full"
                         allowFullScreen
+                        sandbox="allow-scripts allow-same-origin allow-forms"
                         title={`${selectedEvent.title} - ${selectedSource.source}`}
                       />
                     </div>
