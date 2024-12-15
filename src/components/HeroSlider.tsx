@@ -83,62 +83,132 @@ export default function HeroSlider({ events, onEventClick }: HeroSliderProps) {
   const imageSrc = currentEvent.strThumb || (currentEvent.poster ? `https://streamed.su${currentEvent.poster}` : '/placeholder.svg?height=1080&width=1920')
 
   return (
-    <section aria-label="Hero" className="relative w-full h-[80vh]">
-      <div className="absolute inset-0">
+    <div>
+
+    <section aria-label="Hero" className="relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh]">
+      {/* Background Image */}
+      <div className="absolute inset-0 h-[40vh] sm:h-[50vh] md:h-[60vh]">
         <Image
           src={imageSrc}
           alt={currentEvent.title}
           layout="fill"
           objectFit="cover"
           priority
-          className="transition-opacity duration-300"
+          className="transition-opacity duration-300 sm:object-contain"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
       </div>
-      <div className="absolute bottom-0 left-0 p-6 max-w-4xl z-10">
+  
+      {/* Text Content */}
+      <div className="static sm:absolute bottom-0 left-0 p-6 max-w-4xl z-10 sm:p-4 sm:max-w-sm sm:bottom-2">
         <div className="flex items-center gap-2 mb-2">
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-            currentEvent.date === 0 ? 'bg-red-600' : 'bg-black/50'
-          }`}>
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-medium ${
+              currentEvent.date === 0 ? 'bg-red-600' : 'bg-black/50'
+            } sm:text-xs`}
+          >
             {formatDate(currentEvent.date, currentEvent.category)}
           </span>
           {currentEvent.popular && (
-            <span className="bg-yellow-600 rounded-full p-1">
-              <Star className="w-4 h-4" />
+            <span className="bg-yellow-600 rounded-full p-1 sm:p-0.5">
+              <Star className="w-4 h-4 sm:w-3 sm:h-3" />
             </span>
           )}
         </div>
-        <h1 className="text-4xl font-bold mb-2 text-white">{currentEvent.title}</h1>
-        <p className="text-lg text-gray-200 mb-4">{currentEvent.category}</p>
-        <Button 
+        <h1 className="text-4xl font-bold mb-2 text-white sm:text-2xl sm:mb-1">
+          {currentEvent.title}
+        </h1>
+        <p className="text-lg text-gray-200 mb-4 sm:text-sm sm:mb-2">
+          {currentEvent.category}
+        </p>
+        <Button
           onClick={() => onEventClick(currentEvent)}
           className="bg-primary hover:bg-primary/90"
           size="lg"
         >
-            <Icons.play className="fill-current mr-2" aria-hidden="true" />
-            Watch Now
+          <Icons.play
+            className="fill-current mr-2 sm:w-4 sm:h-4"
+            aria-hidden="true"
+          />
+          Watch Now
         </Button>
       </div>
-      <div className="absolute bottom-4 right-4 flex space-x-2">
-        <Button variant="outline" size="icon" onClick={goToPrevious} className="rounded-full bg-black/50 hover:bg-black/70">
-          <ChevronLeft className="h-4 w-4" />
+
+      
+
+      
+  
+      {/* Navigation Buttons */}
+      <div className="absolute bottom-4 right-4 flex space-x-2 sm:bottom-2 sm:right-2">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={goToPrevious}
+          className="rounded-full bg-black/50 hover:bg-black/70 sm:w-8 sm:h-8"
+        >
+          <ChevronLeft className="h-4 w-4 sm:h-3 sm:w-3" />
         </Button>
-        <Button variant="outline" size="icon" onClick={goToNext} className="rounded-full bg-black/50 hover:bg-black/70">
-          <ChevronRight className="h-4 w-4" />
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={goToNext}
+          className="rounded-full bg-black/50 hover:bg-black/70 sm:w-8 sm:h-8"
+        >
+          <ChevronRight className="h-4 w-4 sm:h-3 sm:w-3" />
         </Button>
       </div>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+  
+      {/* Dots/Indicators */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 sm:space-x-1">
+          
         {eventsWithThumbs.map((_, index) => (
           <button
             key={index}
             className={`w-2 h-2 rounded-full ${
               index === currentIndex ? 'bg-white' : 'bg-white/50'
-            }`}
+            } sm:w-1.5 sm:h-1.5`}
             onClick={() => goToSlide(index)}
           />
         ))}
       </div>
+
+      
+
     </section>
-  )
+    <div className="static sm:hidden bottom-0 left-0 px-6 max-w-4xl z-10 sm:p-4 sm:max-w-sm sm:bottom-2">
+        <div className="flex items-center gap-2 mb-2">
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-medium ${
+              currentEvent.date === 0 ? 'bg-red-600' : 'bg-black/50'
+            } sm:text-xs`}
+          >
+            {formatDate(currentEvent.date, currentEvent.category)}
+          </span>
+          {currentEvent.popular && (
+            <span className="bg-yellow-600 rounded-full p-1 sm:p-0.5">
+              <Star className="w-4 h-4 sm:w-3 sm:h-3" />
+            </span>
+          )}
+        </div>
+        <h2 className="text-2xl font-bold mb-2 text-white sm:text-2xl sm:mb-1">
+          {currentEvent.title}
+        </h2>
+        <Button
+          onClick={() => onEventClick(currentEvent)}
+          className="bg-primary hover:bg-primary/90"
+          size="lg"
+        >
+          <Icons.play
+            className="fill-current mr-2 sm:w-4 sm:h-4"
+            aria-hidden="true"
+          />
+          Watch Now
+        </Button>
+      </div>
+
+    </div>
+  );
+  
+  
 }
 
