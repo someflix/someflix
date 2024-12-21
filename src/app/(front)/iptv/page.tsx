@@ -76,7 +76,7 @@ async function fetchChannels(): Promise<Channel[]> {
 }
 
 async function fetchEvents(): Promise<Event[]> {
-  const response = await fetch('https://streamed.su/api/matches/all')
+  const response = await fetch('https://corsproxy.io/?url=https://streamed.su/api/matches/all')
   if (!response.ok) {
     throw new Error('Failed to fetch events')
   }

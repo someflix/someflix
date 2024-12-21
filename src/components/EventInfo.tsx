@@ -36,7 +36,7 @@ export function EventInfo({ event }: EventInfoProps) {
 
   const imageSrc = useMemo(() => {
     if (event.poster) {
-      return `https://streamed.su${event.poster}`
+      return `https://corsproxy.io/?url=https://streamed.su${event.poster}`
     }
     return getRandomWallpaper(event.category)
   }, [event.poster, event.category])

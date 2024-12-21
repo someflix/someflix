@@ -80,7 +80,7 @@ export default function HeroSlider({ events, onEventClick }: HeroSliderProps) {
   if (eventsWithThumbs.length === 0) return null
 
   const currentEvent = eventsWithThumbs[currentIndex]
-  const imageSrc = currentEvent.strThumb || (currentEvent.poster ? `https://streamed.su${currentEvent.poster}` : '/placeholder.svg?height=1080&width=1920')
+  const imageSrc = currentEvent.strThumb || (currentEvent.poster ? `https://corsproxy.io/?url=https://streamed.su${currentEvent.poster}` : '/placeholder.svg?height=1080&width=1920')
 
   return (
     <div>

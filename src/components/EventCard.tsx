@@ -68,7 +68,7 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 
   const getImageSrc = () => {
     if (event.poster) {
-      return `https://streamed.su${event.poster}`
+      return `https://corsproxy.io/?url=https://streamed.su${event.poster}`
     }
     if (isFootball && sportDBEvent) {
       if (sportDBEvent.strThumb) return sportDBEvent.strThumb;
